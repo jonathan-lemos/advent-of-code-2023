@@ -20,23 +20,6 @@ for group in groups[2:end]
   end
 end
 
-function range_intersects(a, b)
-  c, d = a
-  e, f = b
-
-  return !(c <= d < e <= f || e <= f < c <= d)
-end
-
-function range_intersection(a, b)
-  c, d = a
-  e, f = b
-  _, x, y, _ = sort([c, d, e, f])
-  return x => y
-end
-
-function in_range(r, x)
-  return range_intersect(r, x => x)
-end
 
 function part1()
   best = 0x7FFFFFFFFFFFFFFF
