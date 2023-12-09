@@ -9,7 +9,7 @@ pln = println
 removere(l, re) = replace(l, re => "")
 splitstrip(l, o = " ") = map(strip, split(l, o))
 splitints(l, o = " ") = map(int, splitstrip(l, o))
-extractints(s) = map(int, filter(x -> x != "", split(s, r"[^0-9]")))
+extractints(s) = map(int, filter(x -> x != "", split(s, r"[^\-0-9]")))
 
 function range_intersects(a, b)
   c, d = a
