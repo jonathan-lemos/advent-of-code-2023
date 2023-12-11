@@ -1,6 +1,6 @@
 include("common.jl")
 
-ls = aoclines("10")
+ls = aoclines("10e3")
 
 delta_map = Dict(
     '|' => [(-1, 0), (1, 0)],
@@ -274,6 +274,8 @@ function part2()
 
     count = 0
 
+    inside = Set()
+
     for (i, r) in enumerate(ls)
         for (j, c) in enumerate(r)
             if (i, j) in loop_set
@@ -298,11 +300,26 @@ function part2()
             end
 
             if not_filled
+                push!(inside, (i, j))
                 count += 1
             end
         end
     end
 
+    for (i, r) in enumerate(ls)
+        for (j, c) in enumerate(r)
+            if (i, j) in loop_set
+                print(c)
+            elseif (i, j) in inside
+                print("\033[32m$c\033[m")
+            else
+                print("\033[31m$c\033[m")
+            end
+        end
+        pln()
+    end
+
+    pln()
     pln(count)
 end
 
