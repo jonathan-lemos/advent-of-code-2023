@@ -109,7 +109,7 @@ function part2()
     r = 0
 
     for (field, numbers) in springs
-        pln("$field $numbers")
+        #pln("$field $numbers")
 
         field *= "?"
         field ^= 5
@@ -120,12 +120,12 @@ function part2()
 
         last_hash = if occursin("#", field) findlast("#", field)[1] else 0 end
 
-        @memoize function ways(field_idx, numbers_idx, acc)
-            #pln("call $field_idx $numbers_idx $acc")
+        @memoize function ways(field_idx, numbers_idx)
+            #pln("call $field_idx $numbers_idx")
 
             if numbers_idx > length(numbers)
                 return if field_idx > last_hash
-                    #pln("hit $field_idx $numbers_idx $acc")
+                    #pln("hit $field_idx $numbers_idx")
                     1 
                 else 0 end
             end
@@ -134,30 +134,37 @@ function part2()
                 return 0
             end
 
-            if acc > numbers[numbers_idx]
-                return 0
-            end
-
             w = 0
 
             if field[field_idx] == '#' || field[field_idx] == '?'
-                w += ways(field_idx + 1, numbers_idx, acc + 1)
+                acc = 1
+                i = field_idx + 1
+                while i <= length(field)
+                    if field[i] == '#' || (field[i] == '?' && acc < numbers[numbers_idx])
+                        acc += 1
+                    else
+                        break
+                    end
+                    if acc > numbers[numbers_idx]
+                        break
+                    end
+                    i += 1
+                end
+                if acc == numbers[numbers_idx] && (field[i] == '.' || field[i] == '?')
+                    w += ways(i + 1, numbers_idx + 1)
+                end
             end
 
             if field[field_idx] == '.' || field[field_idx] == '?'
-                if acc == numbers[numbers_idx]
-                    w += ways(field_idx + 1, numbers_idx + 1, 0)
-                elseif acc == 0
-                    w += ways(field_idx + 1, numbers_idx, 0)
-                end 
+                w += ways(field_idx + 1, numbers_idx)
             end
            
-            #pln("$field_idx $numbers_idx $acc returning $w")
+            #pln("$field_idx $numbers_idx returning $w")
             return w
         end
 
-        count = ways(1, 1, 0)
-        pln(count)
+        count = ways(1, 1)
+        #pln(count)
         r += count
     end
 
