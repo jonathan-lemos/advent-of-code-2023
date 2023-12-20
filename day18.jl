@@ -313,8 +313,25 @@ function part2_real()
         return dist(x, y) >= dist(px, py) && dist(x, y) >= dist(sx, sy)
     end
 
+    function corner_convex2(i)
+        pred_idx = if i == 1 length(coords) else i - 1 end
+        succ_idx = if i == length(coords) 1 else i + 1 end
+        
+        pdx, pdy = point_delta_dir(coords[i], coords[pred_idx])
+        sdx, sdy = point_delta_dir(coords[i], coords[succ_idx])
+
+        x, y = coords[i]
+
+        px, py = x + pdx, y + pdy
+        sx, sy = x + sdx, y + sdy
+
+        ang = ((atan(sx - x, sy - y) - atan(x - px, y - py) + pi * 2) % (pi * 2)) - pi;
+
+        return ang < 0
+    end
+
     for i in eachindex(coords)
-        if corner_convex(i)
+        if corner_convex2(i)
             outer_vertices += 1
         else
             inner_vertices += 1
